@@ -18,14 +18,10 @@ func (p Person) GetFields() []FieldI {
 	}
 }
 
-
-func (p Person) GetRecFields() []TableI {
+func (p Person) GetForeignFields() []TableI {
 	return []TableI{}
 }
-
 
 func (p Person) TableName() string {
 	return "Person"
 }
-
-

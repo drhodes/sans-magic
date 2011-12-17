@@ -142,7 +142,7 @@ type Field struct {
 type TableI interface {
 	TableName() string
 	GetFields() []FieldI
-	GetRecFields() []TableI
+	GetForeignFields() []TableI
 }
 
 type FieldI interface {	

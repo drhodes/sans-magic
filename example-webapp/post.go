@@ -2,16 +2,17 @@ package main
 
 import . "nomagic"
 
+
 type Post struct {
-	Author Person 
-	Text String32
+	Author Person `foreignkey`
+	Text String32	
 }
 
 func (p Post) GetFields() []FieldI {
 	return []FieldI{p.Text}
 }
 
-func (p Post) GetRecFields() []TableI {
+func (p Post) GetForeignFields() []TableI {
 	return []TableI{p.Author}
 }
 
