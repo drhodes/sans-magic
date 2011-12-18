@@ -11,17 +11,18 @@ func Debug(x interface{}){
 	fmt.Printf("%v\n", x)
 }
 
-func WalkTable(tbl TableI, fn func(FieldI) ) {
+func WalkTable(tbl TableI, vtor Visitor) {
 	Debug("Inserting: " + tbl.TableName())
 	for _, fld := range tbl.GetFields() {
-		fn(fld)
+		vtor.VisitField(fld)
 	}
 	for _, t := range tbl.GetForeignFields() {
-		WalkTable(t, fn)
+		vtor.VisitTable(t)
+		WalkTable(t, vtor)
 	}		
 }
 
-type KeyId uint64
+type KeyId int64
 
 func MagicTable(tbl TableI) map[string]string {
 	reverseLookup := make(map[string]string)
@@ -29,16 +30,17 @@ func MagicTable(tbl TableI) map[string]string {
 	valOfTbl := reflect.ValueOf(tbl)	
 	typeOfTbl := reflect.TypeOf(tbl)
 
-	// this is dastardly.
 	for i:=0; i < valOfTbl.NumField(); i++ {
-		fld := typeOfTbl.Field(i)
-		field_name := fld.Name
-		field_tag := fld.Tag
+		fldT := typeOfTbl.Field(i)
+		field_name := fldT.Name
+		field_tag := fldT.Tag
+		
+		fldV := valOfTbl.Field(i)
 
 		if field_tag == "foreignkey" {
 			reverseLookup[field_name] = "foreignkey"
 		} else {
-			reverseLookup[field_name] = valOfTbl.Field(i).Interface().(FieldI).SqlVal()
+			reverseLookup[field_name] = fldV.Interface().(FieldI).SqlVal()
 		}
 	}
 
@@ -54,7 +56,7 @@ func MagicLookup(m map[string]string, s string) (string, os.Error) {
 	return "not found", os.NewError("Could not lookup the field value for: " + s)
 }
 
-func InsertTable(tbl TableI) KeyId {
+func InsertTable(tbl TableI) (KeyId, string) {
 	Debug("Inserting: " + tbl.TableName())
 
 	// We need to grab the name of the field from the table.  Not too much magic.
@@ -74,10 +76,14 @@ func InsertTable(tbl TableI) KeyId {
 	}
 
 	foreign_pairs := make(map[string]string)
-
+	
+	recursive_qstring := ""
+	fkeyID := -1
+	
 	for _, fld := range tbl.GetForeignFields() {
 		t := reflect.ValueOf(fld).Interface().(TableI)
-		fkeyID := InsertTable(fld)
+		fkeyID, qsr := InsertTable(fld)
+		recursive_qstring += qsr 
 		foreign_pairs[t.TableName()] = fmt.Sprintf("%d", fkeyID)
 	}		
 
@@ -101,7 +107,6 @@ func InsertTable(tbl TableI) KeyId {
 		strings.Join(comma_fields, ", "),
 		strings.Join(comma_values, ", "))
 
-	Debug(qs)
-	return 666
+	return KeyId(fkeyID), recursive_qstring + qs
 }
 

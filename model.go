@@ -8,16 +8,19 @@ import (
 func quote(s string) string { return `"` + s + `"` }
 
 // Numeric Types ------------------------------------------------------------------
-type Int8 struct {
-	GoValue int8
-}
+//type Int8 struct {
+//	GoValue int8
+//}
+
+type Int8 int8
+
 
 func (self Int8) SqlType() string { 
 	return "TINYINT" 
 }
 
 func (self Int8) SqlVal() string {
-	return quote(fmt.Sprintf("%d", self.GoValue))
+	return quote(fmt.Sprintf("%d", int8(self)))
 }
 
 // ------------------------------------------------------------------
@@ -56,16 +59,14 @@ type String struct {
 }
 
 // ------------------------------------------------------------------
-type String8 struct {
-	GoValue string 
-}
+type String8 string
 
 func (self String8) SqlType() string { 
 	return "TINYTEXT" 
 }
 
 func (self String8) SqlVal() string {
-	return quote(self.GoValue)	
+	return quote(string(self))
 }
 
 // ------------------------------------------------------------------
@@ -75,16 +76,14 @@ type String16 struct {
 
 
 // ------------------------------------------------------------------
-type String32 struct {
-	GoValue string 
-}
+type String32 string
 
-func (self String32) SqlType() string {
-	return "TEXT"
+func (self String32) SqlType() string { 
+	return "TEXT" 
 }
 
 func (self String32) SqlVal() string {
-	return quote(self.GoValue)	
+	return quote(string(self))
 }
 
 
@@ -106,16 +105,14 @@ type MediumBlob struct {
 }
 
 // ------------------------------------------------------------------
-type LongBlob struct {
-	GoValue []byte
-}
+type LongBlob []byte
 
 func (self LongBlob) SqlType() string { 
 	return "LONGBLOB" 
 }
 
 func (self LongBlob) SqlVal() string {
-	return quote(string(self.GoValue))
+	return quote(fmt.Sprintf("%v", self))
 }
 
 
