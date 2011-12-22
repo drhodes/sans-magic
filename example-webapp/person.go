@@ -2,6 +2,10 @@ package main
 
 import . "nomagic"
 
+
+
+
+
 type Person struct {
 	Name String8
 	Email String8
@@ -25,3 +29,4 @@ func (p Person) GetForeignFields() []TableI {
 func (p Person) TableName() string {
 	return "Person"
 }
+

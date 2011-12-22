@@ -1,0 +1,15 @@
+Todos = SC.Application.create();
+
+SC.ready(function() {
+  Todos.mainPane = SC.TemplatePane.append({
+    layerId: 'todos',
+    templateName: 'todos'
+  });
+});
+
+var Person map[string]FieldI {
+	"Name": String8,
+	"Email": String8,
+	"Age": Int8,
+	"Icon": LongBlob,
+}
