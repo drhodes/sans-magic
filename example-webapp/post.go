@@ -1,21 +1,14 @@
 package main
 
-import . "nomagic"
+import . "sansmagic"
 
+var Post = NewTable(
+	"Post",
+	Fields {
+		"Text": String32{},
+	},	
 
-type Post struct {
-	Author Person `foreignkey`
-	Text String32	
-}
-
-func (p Post) GetFields() []FieldI {
-	return []FieldI{p.Text}
-}
-
-func (p Post) GetForeignFields() []TableI {
-	return []TableI{p.Author}
-}
-
-func (p Post) TableName() string {
-	return "Post"
-}
+	Tables {
+		"Author": Person,
+	},
+	)
