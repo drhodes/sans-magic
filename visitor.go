@@ -1,7 +1,6 @@
-package nomagic
-
+package sansmagic
 
 type Visitor interface {
-	VisitTable(TableI)
+	VisitTable(Table)
 	VisitField(FieldI)
 }

@@ -1,27 +1,23 @@
 package main
 
-import . "nomagic"
+import . "sansmagic"
 
-type Person struct {
-	Name String8
-	Email String8
-	Age Int8
-	Icon LongBlob
-}
+var Person = NewTable (
+	"Person", // table name.
+	
+	Fields {
+		"Name": String8{},
+		"Email": String8{},
+		"Age": Int8{},
+		"Icon": LongBlob{},
+	},
+	
+	Tables{},
+	)
 
-func (p Person) GetFields() []FieldI {
-	return []FieldI{
-		p.Name,
-		p.Email,
-		p.Age,
-		p.Icon,
-	}
-}
 
-func (p Person) GetForeignFields() []TableI {
-	return []TableI{}
-}
 
-func (p Person) TableName() string {
-	return "Person"
-}
+
+
+
+

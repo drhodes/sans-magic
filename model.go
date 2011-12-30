@@ -1,4 +1,4 @@
-package nomagic
+package sansmagic
 
 import (
 	"time";
@@ -9,10 +9,16 @@ func quote(s string) string { return `"` + s + `"` }
 
 // Numeric Types ------------------------------------------------------------------
 //type Int8 struct {
-//	GoValue int8
+//	GoVal int8
 //}
+type Int8 struct {
+	GoVal int8
+}
 
-type Int8 int8
+func (self Int8) Copy() FieldI {
+	return Int8{self.GoVal}
+}
+
 
 
 func (self Int8) SqlType() string { 
@@ -20,92 +26,116 @@ func (self Int8) SqlType() string {
 }
 
 func (self Int8) SqlVal() string {
-	return quote(fmt.Sprintf("%d", int8(self)))
+	return quote(fmt.Sprintf("%d", self.GoVal))
 }
 
-// ------------------------------------------------------------------
+// -----------------------------------------------------------------
+
 type Int16 struct {
-	GoValue int16
+	GoVal int16
 }
+
+
 type Int32 struct {
-	GoValue int32
+	GoVal int32
 }
+
 type Int64 struct {
-	GoValue int64
+	GoVal int64
 }
 type Uint8 struct {
-	GoValue uint8
+	GoVal uint8
 }
 type Uint16 struct {
-	GoValue uint16
+	GoVal uint16
 }
 type Uint32 struct {
-	GoValue uint32
+	GoVal uint32
 }
 type Uint64 struct {
-	GoValue uint64
+	GoVal uint64
 }
 type Float32 struct {
-	GoValue float32
+	GoVal float32
 }
 type Float64 struct {
-	GoValue float64
+	GoVal float64
 }
 type Bool struct {
-	GoValue bool
+	GoVal bool
 }
 type String struct {
-	GoValue string 
+	GoVal string 
 }
 
-// ------------------------------------------------------------------
-type String8 string
+// -----------------------------------------------------------------
+type String8 struct {
+	GoVal string
+}
+
+func (self String8) Copy() FieldI {
+	return String8{self.GoVal}
+}
 
 func (self String8) SqlType() string { 
 	return "TINYTEXT" 
 }
 
 func (self String8) SqlVal() string {
-	return quote(string(self))
+	return quote(string(self.GoVal))
 }
+
 
 // ------------------------------------------------------------------
 type String16 struct {
-	GoValue string 
+	GoVal string 
 }
 
 
 // ------------------------------------------------------------------
-type String32 string
+type String32 struct {
+	GoVal string
+}
+
+func (self String32) Copy() FieldI {
+	return String32{self.GoVal}
+}
 
 func (self String32) SqlType() string { 
 	return "TEXT" 
 }
 
 func (self String32) SqlVal() string {
-	return quote(string(self))
+	return quote(self.GoVal)
 }
+
+
 
 
 // ------------------------------------------------------------------
 type String64 struct {
-	GoValue string 
+	GoVal string 
 }
 
 type TinyBlob struct {
-	GoValue []byte 
+	GoVal []byte 
 }
 
 type Blob struct {
-	GoValue []byte 
+	GoVal []byte 
 }
 
 type MediumBlob struct {
-	GoValue []byte 
+	GoVal []byte 
 }
 
-// ------------------------------------------------------------------
+// -----------------------------------------------------------------
 type LongBlob []byte
+
+func (self LongBlob) Copy() FieldI {
+	return LongBlob(self)
+}
+
 
 func (self LongBlob) SqlType() string { 
 	return "LONGBLOB" 
@@ -116,36 +146,22 @@ func (self LongBlob) SqlVal() string {
 }
 
 
+
 // ------------------------------------------------------------------
 type DateTime struct {
-    GoValue time.Time	
+    GoVal time.Time	
 }
 type Date struct {
-	GoValue time.Time 
+	GoVal time.Time 
 }
 type Time struct {
-	GoValue time.Time 
+	GoVal time.Time 
 }
 
 type SqlType struct { 
 	Val interface{}
 }
 
-type Field struct {
-	Name string
-	Type SqlType 
-}
-
-type TableI interface {
-	TableName() string
-	GetFields() []FieldI
-	GetForeignFields() []TableI
-}
-
-type FieldI interface {	
-	SqlType() string
-	SqlVal() string
-}
 
 
 // No Magic
