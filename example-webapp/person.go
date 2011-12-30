@@ -3,7 +3,7 @@ package main
 import . "sansmagic"
 
 var Person = NewTable (
-	"Person",
+	"Person", // table name.
 	
 	Fields {
 		"Name": String8{},
@@ -14,5 +14,10 @@ var Person = NewTable (
 	
 	Tables{},
 	)
+
+
+
+
+
 
 

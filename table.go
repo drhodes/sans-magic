@@ -101,3 +101,7 @@ func (tbl Table) Insert() (KeyId, string, os.Error) {
 	return KeyId(fkeyID), recursive_qstring + qs, nil
 }
 
+/*
+func Select(q Query) Table {	
+}
+*/

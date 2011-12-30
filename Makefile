@@ -8,7 +8,8 @@ GOFILES=\
 	db.go\
 	table.go\
 	fields.go\
-	routes.go\
+	view.go\
 	visitor.go\
+	url.go\
 
 include $(GOROOT)/src/Make.pkg

@@ -1,5 +1,8 @@
 package sansmagic
 
+import "http"
+
 type View interface {
-	Route(... string) Response
+	Route(string) bool
+	Response(... string) http.Response
 } 
