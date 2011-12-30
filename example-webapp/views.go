@@ -1,39 +1,29 @@
 package main
 
 import (
-	"http"
 	. "sansmagic"
+	"http"
 	"log"
 )
 
-// this is the shape of the json response.
-// 
+// A request comes down and a 
 
 type Homepage struct {	
-	Author Table
-	Posts []Table
+	Post Table	
 } 
 
-/*
-func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
-	f(w, r)
-}
-*/
-
-type Foo struct {
+func NewHomepage() Homepage {
+	return Homepage { Post }
 }
 
-func (f Foo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Print(w)
-	log.Print(r)
+func (hp Homepage) Route() string {
+	return "/Homepage/{postid:[0-9]+}"
 }
 
-func (hp Homepage) Route() Foo {
-	return Foo{}
-}
-
-
-func (hp Homepage) Response(... string) string {
-	return "asdf"
+func (hp Homepage) Handler() func(rw http.ResponseWriter, request *http.Request) {
+	return func(rw http.ResponseWriter, request *http.Request) {
+		log.Print(rw)
+		log.Print(request)
+	}
 }
 

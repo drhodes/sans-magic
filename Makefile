@@ -11,5 +11,6 @@ GOFILES=\
 	view.go\
 	visitor.go\
 	url.go\
+	router.go\
 
 include $(GOROOT)/src/Make.pkg

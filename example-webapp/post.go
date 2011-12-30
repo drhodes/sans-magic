@@ -2,13 +2,8 @@ package main
 
 import . "sansmagic"
 
-var Post = NewTable(
+var Post = NewTable (
 	"Post",
-	Fields {
-		"Text": String32{},
-	},	
-
-	Tables {
-		"Author": Person,
-	},
+	Fields { "Text": String32{} },		
+	Tables { "Author": Person },
 	)
