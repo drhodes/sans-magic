@@ -15,7 +15,6 @@ func (self Fields) Copy() Fields {
 	return m
 }
 
-
 type FieldI interface {	
 	SqlType() string
 	SqlVal() string

@@ -8,6 +8,7 @@ import (
 )
 	
 func main() {
+	/*
 	p := Person.UpdateField("Name", String8{"Derek"})
 	log.Print(Person)
 	log.Print(p)
@@ -15,13 +16,15 @@ func main() {
 	post := Post.UpdateTable("Author", p)
 	a,b,c := post.Insert()
 	log.Print(a, b, c)
+	 */
 
+	// Views.
 	r := NewRouter([]Routable{
-		NewHomepage(),
+		NewHomepage(), 
 		NewHomepage(),		
 	})
-
+	
 	log.Print(r)
 	
-	http.ListenAndServe(":8080", r.Server()) 
+	http.ListenAndServe(":8080", r.Mux()) 
 }

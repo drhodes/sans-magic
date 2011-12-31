@@ -18,12 +18,14 @@ func NewRouter(rs []Routable) Router {
 	return Router{ rs }
 }
 
-func (r Router) Server() *mux.Router {
-	hdlr := new(mux.Router)
+func (r Router) Mux() *mux.Router {
+	rtr := new(mux.Router)
+
 	for _, rs := range r.Routables {
-		hdlr.HandleFunc(rs.Route(), rs.Handler())
+		rtr.HandleFunc(rs.Route(), rs.Handler())
 	}
-	return hdlr
+
+	return rtr
 }
 
 

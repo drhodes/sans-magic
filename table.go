@@ -4,6 +4,7 @@ import (
 	"os"
 	"fmt"
 	"strings"
+	"log"
 )
 
 type KeyId int
@@ -15,7 +16,6 @@ type Table struct {
 	Tables Tables
 	Id uint64
 }
-
 
 func (tbls Tables) Copy() Tables {
 	m := make(map[string]Table)
@@ -54,7 +54,6 @@ func (tbl Table) UpdateTable(s string, table Table) Table {
 	return t
 }
 
-
 func NewTable(name string, flds Fields, tbls Tables) Table {
 	return Table{name, flds, tbls, 0}
 }
@@ -84,22 +83,31 @@ func (tbl Table) Insert() (KeyId, string, os.Error) {
 		comma_fields = append(comma_fields, fname)
 		comma_values = append(comma_values, fld.SqlVal()) 
 	}
-
+	
 	for ftbl_name, ftbl := range tbl.Tables {
 		fkeyID, qsr, _ := ftbl.Insert()
 		recursive_qstring += qsr 
 		keyIdTxt := fmt.Sprintf("%d", fkeyID)
-
+		
 		comma_fields = append(comma_fields, ftbl_name)
 		comma_values = append(comma_values, keyIdTxt) 
 	}
-
+	
 	qs := fmt.Sprintf(QueryString, 
 		strings.Join(comma_fields, ", "),
 		strings.Join(comma_values, ", "))
-
+	
 	return KeyId(fkeyID), recursive_qstring + qs, nil
 }
+
+func (tbl Table) Save() {
+	_, instr, err := tbl.Insert()
+	if err != nil {
+		log.Print(instr)
+	}	
+}
+
+
 
 /*
 func Select(q Query) Table {	
