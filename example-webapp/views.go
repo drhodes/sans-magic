@@ -6,7 +6,17 @@ import (
 	"http"
 	"log"
 )
+/*
+ p := Person.UpdateField("Name", String8{"Derek"})
+ log.Print(Person)
+ log.Print(p)
+ 
+ post := Post.UpdateTable("Author", p)
+ a,b,c := post.Insert()
+ log.Print(a, b, c)
+ */
 
+// Views.
 
 type Homepage struct {	
 	Person Table
