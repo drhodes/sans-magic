@@ -8,6 +8,7 @@ import (
 
 // A request comes down and a 
 
+
 type Homepage struct {	
 	Post Table	
 } 
@@ -19,6 +20,7 @@ func NewHomepage() Homepage {
 func (hp Homepage) Route() string {
 	return "/Homepage/{postid:[0-9]+}"
 }
+
 
 func (hp Homepage) Handler() func(rw http.ResponseWriter, request *http.Request) {
 	return func(rw http.ResponseWriter, request *http.Request) {

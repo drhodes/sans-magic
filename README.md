@@ -1,3 +1,8 @@
+I've just got this up on github for back up reasons for now
+it might turn into something useful.  I'm still exploring
+how django-like models might be crafted in go against the
+different data stores available.
+
 
 =============
 

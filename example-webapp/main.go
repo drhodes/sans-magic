@@ -4,12 +4,8 @@ import (
 	. "sansmagic"
     "http"
     "log"
-	"io"
+	//"io"
 )
-
-func HelloServer(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "hello, world!\n")
-}
 	
 func main() {
 	p := Person.UpdateField("Name", String8{"Derek"})
@@ -22,8 +18,9 @@ func main() {
 
 	r := NewRouter([]Routable{
 		NewHomepage(),
-		NewHomepage(),
+		NewHomepage(),		
 	})
+
 	log.Print(r)
 	
 	http.ListenAndServe(":8080", r.Server()) 
