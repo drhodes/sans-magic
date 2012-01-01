@@ -64,10 +64,11 @@ type Float64 struct {
 type Bool struct {
 	GoVal bool
 }
+/*
 type String struct {
 	GoVal string 
 }
-
+*/
 // -----------------------------------------------------------------
 type String8 struct {
 	GoVal string
