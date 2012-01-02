@@ -1,3 +1,5 @@
+package sansmagic
+/*
 package main
 
 import (
@@ -36,3 +38,4 @@ func main() {
 
         fmt.Println("Phone:", result.Phone)
 }
+*/

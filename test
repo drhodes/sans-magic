@@ -1,0 +1,13 @@
+
+# cp all tests to this directory
+
+cp ./tests/*_test.go ./
+
+for testdir in $(find . -type d -iname "tests")
+do cp -f $testdir/*_test.go ./
+done
+
+gotest
+
+mv *_test.go /tmp
+make -s clean

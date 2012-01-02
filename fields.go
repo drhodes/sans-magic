@@ -17,7 +17,7 @@ func (self Fields) Copy() Fields {
 
 type FieldI interface {	
 	SqlType() string
-	SqlVal() string
+	SqlVal() string	
 	Copy() FieldI
 }
 
