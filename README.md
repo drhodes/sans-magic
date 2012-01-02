@@ -1,8 +1,6 @@
 I've just got this up on github for back up reasons for now
 it might turn into something useful.  I'm still exploring
-how django-like models might be crafted in go against the
-different data stores available.
-
+how django-like models might be crafted in go against mongo
 
 =============
 
@@ -21,6 +19,12 @@ Dependecies
 The dependencies listed are required if you wish to use SansMagic
 
 * [.golang](http://golang.org/doc/install.html) 
+* goinstall launchpad.net/gobson/bson
+* goinstall launchpad.net/gobson/mgo
+
+
+
+
 
 Contributing
 ------------
