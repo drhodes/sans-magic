@@ -17,17 +17,17 @@ func LogIf(err os.Error) {
 	}
 }
 
-type String struct {
+type MyString struct {
 	S string
 }
 
-func (self *String) Write(p []uint8) (int, os.Error) {
+func (self *MyString) Write(p []uint8) (int, os.Error) {
 	for _, b := range p {
 		self.S += string(b)		
 	}
 	return 0, nil
 }
 
-func (self *String) Contains(s string) bool {
+func (self *MyString) Contains(s string) bool {
 	return strings.Contains(self.S, s)
 }

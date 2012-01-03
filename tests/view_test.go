@@ -11,10 +11,10 @@ var Person = NewTable(
 	"Person", // table name.
 
 	Fields{
-		"Name":  String8{},
-		"Email": String8{},
-		"Age":   Int8{},
-		"Icon":  LongBlob{},
+		"Name":  String{},
+		"Email": String{},
+		"Age":   Int32{},
+		"Icon":  ByteArray{},
 	},
 
 	Tables{},
@@ -49,20 +49,20 @@ func TestMain(t *testing.T) {
 		NewHomepage(),
 		NewHomepage(),
 	})
-	
+
 	serve := func() {
-		err := http.ListenAndServe(":8080", r.Mux())		
+		err := http.ListenAndServe(":8080", r.Mux())
 		t.Fatal(err)
 	}
-	
+
 	go serve()
 	rsp, err := http.Get("http://localhost:8080/Homepage/Derek")
-	LogIf(err)		
+	LogIf(err)
 
-	s := &String{}	
+	s := &String{}
 	rsp.Write(s)
-	
-	if ! s.Contains("Derek") {
+
+	if !s.Contains("Derek") {
 		t.Fatal("ill formed response")
 	}
 }

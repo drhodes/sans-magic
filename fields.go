@@ -16,8 +16,7 @@ func (self Fields) Copy() Fields {
 }
 
 type FieldI interface {	
-	SqlType() string
-	SqlVal() string	
+	MongoVal() string	
 	Copy() FieldI
 }
 

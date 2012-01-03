@@ -1,3 +1,5 @@
+it's not ready yet.
+
 I've just got this up on github for back up reasons for now
 it might turn into something useful.  I'm still exploring
 how django-like models might be crafted in go against mongo
@@ -24,57 +26,14 @@ The dependencies listed are required if you wish to use SansMagic
 
 
 
-
-
-Contributing
-------------
-
-Want to contribute? Great! 
-
-
-
 ### Getting Started
+
+-not yet-
 
 $ goinstall sansmagic
 $ sans new-proj sans-hello
 $ cd sans-hello
 $ make run
-
-    command(:rest2html, /re?st(.txt)?/)
-
-Here we're telling GitHub Markup of the existence of a `rest2html`
-command which should be used for any file ending in `rest`,
-`rst`, `rest.txt` or `rst.txt`. Any regular expression will do.
-
-Finally add your tests. Create a `README.extension` in `test/markups`
-along with a `README.extension.html`. As you may imagine, the
-`README.extension` should be your known input and the
-`README.extension.html` should be the desired output.
-
-Now run the tests: `rake`
-
-If nothing complains, congratulations!
-
-
-### Classes
-
-If your markup can be translated using a Ruby library, that's
-great. Check out Check `lib/github/markups.rb` for some
-examples. Let's look at Markdown:
-
-    markup(:markdown, /md|mkdn?|markdown/) do |content|
-      Markdown.new(content).to_html
-    end
-
-We give the `markup` method three bits of information: the name of the
-file to `require`, a regular expression for extensions to match, and a
-block to run with unformatted markup which should return HTML.
-
-If you need to monkeypatch a RubyGem or something, check out the
-included RDoc example.
-
-Tests should be added in the same manner as described under the
-`Commands` section.
 
 
 Installation
@@ -92,13 +51,12 @@ Example
 Testing
 -------
 
-To run the tests:
+Go to the projects root directory and
 
-    $ gotest
+    $ ./test
 
 To add tests see the `Commands` section earlier in this
 README.
-
 
 Contributing
 ------------
