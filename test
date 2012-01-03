@@ -1,19 +1,19 @@
-
+#!/usr/bin/env bash
 # -*- sh -*-
 
 # check to see if mongodb is running
 pidof mongod
 
-MANUAL_INSTANCE=0
+MANUAL_INSTANCE=false
 MANUAL_INSTANCE_LOG=./tests/mongotmp/manual_instance.log
 
-
-if [ "$?" -eq "0" ]
+if [ "$?" -eq "1" ]
 then 	
 	echo "------------------------------------------------------------------"
 	echo "! MongoDB server not found"
 	echo "-  Starting manual instance"
 	echo "-  Logging to $MANUAL_INSTANCE_LOG"
+	MANUAL_INSTANCE=true
 
 	rm -rf ./tests/mongotmp
 	mkdir ./tests/mongotmp
@@ -27,7 +27,6 @@ then
 		echo "!! Perhaps mongodb is not installed"
 		exit
 	fi
-	MANUAL_INSTANCE=1
 
 else 
 	echo "MongoDB found"
@@ -37,14 +36,15 @@ fi
 cp ./tests/*_test.go ./
 
 for testdir in $(find . -type d -iname "tests")
-do cp -f $testdir/*_test.go ./
+do 
+	cp -f $testdir/*_test.go ./
 done
 
 # run the tests
 make test
 
 # tear down the server if we had to start one.
-if [ $MANUAL_INSTANCE -eq 1 ]	
+if $MANUAL_INSTANCE
 then 
 	echo "-  Killing manual mongod instance"
 	kill `pidof mongod`

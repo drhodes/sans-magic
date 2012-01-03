@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 )
 
 func Debug(x interface{}) {
@@ -23,9 +22,7 @@ func DieIf(err os.Error) {
 	}
 }
 
-
-
-
+/*
 type MyString struct {
 	S string
 }
@@ -40,3 +37,4 @@ func (self *MyString) Write(p []uint8) (int, os.Error) {
 func (self *MyString) Contains(s string) bool {
 	return strings.Contains(self.S, s)
 }
+*/
