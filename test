@@ -1,13 +1,60 @@
 
-# cp all tests to this directory
+# -*- sh -*-
 
+# check to see if mongodb is running
+pidof mongod
+
+MANUAL_INSTANCE=0
+MANUAL_INSTANCE_LOG=./tests/mongotmp/manual_instance.log
+
+
+if [ "$?" -eq "0" ]
+then 	
+	echo "------------------------------------------------------------------"
+	echo "! MongoDB server not found"
+	echo "-  Starting manual instance"
+	echo "-  Logging to $MANUAL_INSTANCE_LOG"
+
+	rm -rf ./tests/mongotmp
+	mkdir ./tests/mongotmp
+
+	mongod --dbpath ./tests/mongotmp >> $MANUAL_INSTANCE_LOG &
+
+	if [ "$?" -ne "0" ] 
+	then 
+		echo "Fatal"
+		echo "!! Couldn't start mongo"
+		echo "!! Perhaps mongodb is not installed"
+		exit
+	fi
+	MANUAL_INSTANCE=1
+
+else 
+	echo "MongoDB found"
+fi
+
+# cp all tests to this directory
 cp ./tests/*_test.go ./
 
 for testdir in $(find . -type d -iname "tests")
 do cp -f $testdir/*_test.go ./
 done
 
-gotest
+# run the tests
+make test
 
+# tear down the server if we had to start one.
+if [ $MANUAL_INSTANCE -eq 1 ]	
+then 
+	echo "-  Killing manual mongod instance"
+	kill `pidof mongod`
+
+	if [ "$?" -ne "0" ] 
+	then 
+		"!! Error while killing manual instance of mongod"
+	fi
+fi
+
+# cleanup.
 mv *_test.go /tmp
 make -s clean
