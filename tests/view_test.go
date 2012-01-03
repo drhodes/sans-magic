@@ -5,10 +5,15 @@ import (
 	"http"
 	"testing"
 	"bytes"
-	"strings"
+	//"strings"
 	"launchpad.net/gobson/bson"
 	"launchpad.net/mgo"
 	mux "gorilla.googlecode.com/hg/gorilla/mux"
+)
+
+
+var (
+	session, err = mgo.Mongo("localhost")
 )
 
 // A person model --------------------------------------------------
@@ -18,16 +23,14 @@ type Person struct {
 	Age int32
 }
 
-func (self Person) GetByName(session *mgo.Session, name string) Person {
-	c := session.DB("test").C("people")
-	result := new(Person)
-	err := c.Find(bson.M{"name": "Derek"}).One(result)
+func (self *Person) GetByName(name string) {
+	c := session.DB("sans").C("person")
+	err := c.Find(bson.M{"name": name}).One(self)
 	DieIf(err)	
-	return *result
 }
 
-func (self Person) Insert (session *mgo.Session) {
-	c := session.DB("test").C("people")
+func (self Person) Insert () {
+	c := session.DB("sans").C("person")
 	DieIf(c.Insert(self))
 }
 
@@ -37,7 +40,7 @@ type Post struct {
 	Author Person
 }
 
-// A homepage view
+// A homepage view --------------------------------------------
 type Homepage struct {
 }
 
@@ -60,7 +63,12 @@ func (hp Homepage) Handler() func(rw http.ResponseWriter, request *http.Request)
 	}
 }
 
+// ------------------------------------------------------------------
 func TestMain(t *testing.T) {
+	DieIf(err)
+
+	defer session.Close()
+
 	r := NewRouter([]Routable{
 		NewHomepage(),
 		NewHomepage(),
@@ -74,28 +82,21 @@ func TestMain(t *testing.T) {
 
 	rsp, err := http.Get("http://localhost:8080/Homepage/Derek")
 	LogIf(err)
-	
-	session, err := mgo.Mongo("localhost")
-	if err != nil {		
-		panic(err)
-	}
-	defer session.Close()
 
 	// Optional. Switch the session to a monotonic behavior.
-	session.SetMode(mgo.Monotonic, true)
+	//session.SetMode(mgo.Monotonic, true)
 
-	person := Person{ "Derek", "asdf@asdf.com", 34 }
-	person.Insert(session)
+	person := Person{ "Derek", "asdf@asdf.com", 33 }
+	person.Insert()
+	person = Person{ "Fred", "asdf@a345sdf.com", 33 }
+	person.Insert()
 
-	p2 := Person{}
-	log.Println(p2.GetByName(session, "Derek"))
+	person.GetByName("Fred")
+	log.Print(person)
+	person.GetByName("Derek")
+	log.Print(person)
 
-
-	bs := []byte{}
-	buf := bytes.NewBuffer(bs)
+	buf := bytes.NewBuffer([]byte{})
 	rsp.Write(buf)
-
-	if !strings.Contains(buf.String(), "Derek") {
-		t.Fatal("ill formed response")
-	}
+	log.Print(buf.String())
 }

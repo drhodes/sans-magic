@@ -1,3 +1,7 @@
 package main
 
-import . "sansmagic"
+// A post model ----------------------------------------------------
+type Post struct {
+	Text string
+	Author Person
+}
