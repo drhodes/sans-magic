@@ -9,7 +9,6 @@ GOFILES=\
 	fields.go\
 	view.go\
 	visitor.go\
-	url.go\
 	router.go\
 	db/*.go\
 

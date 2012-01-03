@@ -17,6 +17,15 @@ func LogIf(err os.Error) {
 	}
 }
 
+func DieIf(err os.Error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+
+
+
 type MyString struct {
 	S string
 }

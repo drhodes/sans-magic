@@ -2,7 +2,6 @@ package sansmagic
 
 type Field struct {
 	Name string     // column name in the schema
-	Type SqlType    // column type in the schema
 }
 
 type Fields map[string]FieldI

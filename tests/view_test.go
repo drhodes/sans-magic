@@ -1,32 +1,48 @@
 package sansmagic
 
 import (
+	"log"
 	"http"
 	"testing"
+	"bytes"
+	"strings"
+	"launchpad.net/gobson/bson"
+	"launchpad.net/mgo"
 	mux "gorilla.googlecode.com/hg/gorilla/mux"
 )
 
-// A person model.
-var Person = NewTable(
-	"Person", // table name.
+// A person model --------------------------------------------------
+type Person struct {
+	Name string
+	Email string
+	Age int32
+}
 
-	Fields{
-		"Name":  String{},
-		"Email": String{},
-		"Age":   Int32{},
-		"Icon":  ByteArray{},
-	},
+func (self Person) GetByName(session *mgo.Session, name string) Person {
+	c := session.DB("test").C("people")
+	result := new(Person)
+	err := c.Find(bson.M{"name": "Derek"}).One(result)
+	DieIf(err)	
+	return *result
+}
 
-	Tables{},
-)
+func (self Person) Insert (session *mgo.Session) {
+	c := session.DB("test").C("people")
+	DieIf(c.Insert(self))
+}
+
+// A post model ----------------------------------------------------
+type Post struct {
+	Text string
+	Author Person
+}
 
 // A homepage view
 type Homepage struct {
-	Person Table
 }
 
 func NewHomepage() Homepage {
-	return Homepage{Person}
+	return Homepage{}
 }
 
 func (hp Homepage) Route() string {
@@ -54,15 +70,32 @@ func TestMain(t *testing.T) {
 		err := http.ListenAndServe(":8080", r.Mux())
 		t.Fatal(err)
 	}
-
 	go serve()
+
 	rsp, err := http.Get("http://localhost:8080/Homepage/Derek")
 	LogIf(err)
+	
+	session, err := mgo.Mongo("localhost")
+	if err != nil {		
+		panic(err)
+	}
+	defer session.Close()
 
-	s := &String{}
-	rsp.Write(s)
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
 
-	if !s.Contains("Derek") {
+	person := Person{ "Derek", "asdf@asdf.com", 34 }
+	person.Insert(session)
+
+	p2 := Person{}
+	log.Println(p2.GetByName(session, "Derek"))
+
+
+	bs := []byte{}
+	buf := bytes.NewBuffer(bs)
+	rsp.Write(buf)
+
+	if !strings.Contains(buf.String(), "Derek") {
 		t.Fatal("ill formed response")
 	}
 }

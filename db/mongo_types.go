@@ -12,7 +12,6 @@ type String struct {
 	Goval string
 }
 
-
 func (self String) MongoVal() string {
 	return quote(string(self.Goval))
 }
@@ -49,8 +48,21 @@ type Date struct {
 }
 // ------------------------------------------------------------------
 type ByteArray struct {
-	Goval []FieldI
+	Goval []byte
 }
+
+func (self ByteArray) Copy() FieldI {
+	ba := []byte{}
+	for _, val := range self.Goval {
+		ba = append(ba, val)
+	}	
+ 	return ByteArray{ba}
+}
+
+func (self ByteArray) MongoVal() string {
+	return string(self.Goval)
+}
+
 // ------------------------------------------------------------------
 type Bool struct {
 	Goval bool

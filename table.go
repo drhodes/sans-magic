@@ -1,10 +1,12 @@
 package sansmagic
 
 import (
-	"os"
-	"fmt"
-	"strings"
-	"log"
+	//"fmt"
+	//"launchpad.net/gobson/bson"
+	//"launchpad.net/mgo"
+	//"log"
+	//"os"
+	//"strings"
 )
 
 type KeyId int
@@ -16,6 +18,47 @@ type Table struct {
 	Tables Tables
 	Id uint64
 }
+
+
+
+
+
+
+
+/*
+type Customer struct {
+	Name  string
+	Phone string
+}
+
+func TestMongo45() {
+	session, err := mgo.Mongo("localhost")
+	if err != nil {		
+		panic(err)
+	}
+	defer session.Close()
+
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
+
+	c := session.DB("test").C("people")
+	err = c.Insert(
+		&Customer{"Ale", "+55 53 8116 9639"},
+		&Customer{"Cla", "+55 53 8402 8510"},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	result := Customer{}
+	err = c.Find(bson.M{"name": "Ale"}).One(&result)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Phone:", result.Phone)
+}
+*/
 
 func (tbls Tables) Copy() Tables {
 	m := make(map[string]Table)
@@ -57,59 +100,3 @@ func (tbl Table) UpdateTable(s string, table Table) Table {
 func NewTable(name string, flds Fields, tbls Tables) Table {
 	return Table{name, flds, tbls, 0}
 }
-
-func WalkTable(tbl Table, vtor Visitor) {
-	Debug("Inserting: " + tbl.Name)
-	for _, fld := range tbl.Fields {
-		vtor.VisitField(fld)
-	}
-	for _, t := range tbl.Tables {
-		vtor.VisitTable(t)
-		WalkTable(t, vtor)
-	}		
-}
-
-func (tbl Table) Insert() (KeyId, string, os.Error) {
-	Debug("Inserting: " + tbl.Name)
-	QueryString := `INSERT INTO ` + tbl.Name + ` (%s) VALUES (%s);`
-
-	recursive_qstring := ""
-	fkeyID := -1
-
-	comma_fields := []string{}
-	comma_values := []string{}
-
-	for fname, fld := range tbl.Fields {
-		comma_fields = append(comma_fields, fname)
-		comma_values = append(comma_values, fld.SqlVal()) 
-	}
-	
-	for ftbl_name, ftbl := range tbl.Tables {
-		fkeyID, qsr, _ := ftbl.Insert()
-		recursive_qstring += qsr 
-		keyIdTxt := fmt.Sprintf("%d", fkeyID)
-		
-		comma_fields = append(comma_fields, ftbl_name)
-		comma_values = append(comma_values, keyIdTxt) 
-	}
-	
-	qs := fmt.Sprintf(QueryString, 
-		strings.Join(comma_fields, ", "),
-		strings.Join(comma_values, ", "))
-	
-	return KeyId(fkeyID), recursive_qstring + qs, nil
-}
-
-func (tbl Table) Save() {
-	_, instr, err := tbl.Insert()
-	if err != nil {
-		log.Print(instr)
-	}	
-}
-
-
-
-/*
-func Select(q Query) Table {	
-}
-*/
