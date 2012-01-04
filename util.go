@@ -10,10 +10,11 @@ func Debug(x interface{}) {
 	fmt.Printf("%v\n", x)
 }
 
-func LogIf(err os.Error) {
+func LogIf(err os.Error) os.Error {
 	if err != nil {
 		log.Print(err)
-	}
+	} 
+	return err
 }
 
 func DieIf(err os.Error) {
