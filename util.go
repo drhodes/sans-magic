@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
+	"http"
 )
 
 func Debug(x interface{}) {
@@ -22,6 +24,24 @@ func DieIf(err os.Error) {
 		log.Fatal(err)
 	}
 }
+
+
+func GetFormMap(req *http.Request) map[string]string {
+	vals := req.FormValue("vals")
+	fields := map[string]string{}
+
+	if vals == "" {
+		log.Print("Form values empty")
+		return fields
+	}
+
+	for _, pair := range strings.Split(vals, "&") {
+		ps := strings.Split(pair, "=")		
+		fields[ps[0]] = ps[1]
+	}
+	return fields
+}
+
 
 /*
 type MyString struct {

@@ -3,6 +3,7 @@ include $(GOROOT)/src/Make.inc
 TARG=sansmagic
 
 GOFILES=\
+	template.go\
 	model.go\
 	util.go\
 	table.go\
