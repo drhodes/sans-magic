@@ -25,7 +25,6 @@ func DieIf(err os.Error) {
 	}
 }
 
-
 func GetFormMap(req *http.Request) map[string]string {
 	vals := req.FormValue("vals")
 	fields := map[string]string{}
@@ -41,6 +40,8 @@ func GetFormMap(req *http.Request) map[string]string {
 	}
 	return fields
 }
+
+
 
 
 /*

@@ -41,10 +41,14 @@ func (tm *TemplateMgr) VisitDir(path string, f *os.FileInfo) bool {
 func (tm *TemplateMgr) VisitFile(path string, f *os.FileInfo) {
 	temp, err := mustache.ParseFile(path)
 	DieIf(err)
+	
+	if path[0] == '.' {
+		return
+	}
 
 	if prev, ok := tm.Templates[path]; ok {
 		log.Print(f)
 		log.Fatal("overloading templates: ", prev)
-	}
+	}	
 	tm.Templates[path] = temp	
 }
