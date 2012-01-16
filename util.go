@@ -19,9 +19,9 @@ func LogIf(err os.Error) os.Error {
 	return err
 }
 
-func DieIf(err os.Error) {
+func DieIf(err os.Error, args ...interface{}) {
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err, args)
 	}
 }
 
